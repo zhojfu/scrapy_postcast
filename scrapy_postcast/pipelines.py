@@ -11,8 +11,8 @@ class ScrapyPostcastPipeline(object):
         self.file = open('items.jl', 'wb')
 
     def process_item(self, item, spider):
-        line = json.dumps(dict(item))
-        self.file.write(line)
+        #line = json.dumps(dict(item))
+        #self.file.write(line)
         return item
 
 class MongoDBPipeline(object):

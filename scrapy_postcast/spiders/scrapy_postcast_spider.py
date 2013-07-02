@@ -29,6 +29,7 @@ class ScrapyPostcastSpider(BaseSpider):
                 request =  Request(url, callback=self.get_content)
                 request.meta['item'] = item
                 yield request
+            break
 
     def get_content(self, response):
         item = response.meta['item']
@@ -41,13 +42,15 @@ class ScrapyPostcastSpider(BaseSpider):
             for p in prographs:
                 raw.append(nltk.clean_html(p.extract()))
             item['text'] = raw
-        yield item
-#        for link in mp3links:
-#            request = Request(link, callback=self.get_podcast)
-#            request.meta['item'] = item
-#            yield request
+        #yield item
+        for link in mp3links:
+            request = Request(link, callback=self.get_podcast)
+            request.meta['item'] = item
+            yield request
 
     def get_podcast(self, response):
         item = response.meta['item']
         item['podcast'] = response.body
+        with open('postcast.mp3', 'wb+') as f:
+            f.write(response.body)
         yield item
