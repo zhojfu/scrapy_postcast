@@ -24,6 +24,7 @@ MONGODB_PORT = 27017
 MONGODB_DB = 'scrapy_postcast'
 MONGODB_COLLECTION = 'postcast'
 MONGODB_UNIQ_KEY = '_id'
+GridFs_Collection = 'postcast_mp3'
 
 LOG_FILE = 'scrapy_postcast.logfile'
 LOG_LEVEL = 'DEBUG'

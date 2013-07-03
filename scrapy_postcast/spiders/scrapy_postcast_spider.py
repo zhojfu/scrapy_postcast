@@ -1,6 +1,5 @@
 from scrapy.spider import BaseSpider
 from scrapy.selector import HtmlXPathSelector
-from scrapy import log
 from scrapy_postcast.items import ScrapyPostcastItem
 from scrapy.http import Request
 import nltk
@@ -19,7 +18,6 @@ class ScrapyPostcastSpider(BaseSpider):
     def parse(self, response):
         hxs = HtmlXPathSelector(response)
         list = hxs.select('//*[@class="hasThumb message_box"]')
-        items = []
         for li in list:
             item = ScrapyPostcastItem()
             item['_id'] = li.select('h3/a/text()').extract()[0]
@@ -42,7 +40,6 @@ class ScrapyPostcastSpider(BaseSpider):
             for p in prographs:
                 raw.append(nltk.clean_html(p.extract()))
             item['text'] = raw
-        #yield item
         for link in mp3links:
             request = Request(link, callback=self.get_podcast)
             request.meta['item'] = item
@@ -51,6 +48,6 @@ class ScrapyPostcastSpider(BaseSpider):
     def get_podcast(self, response):
         item = response.meta['item']
         item['podcast'] = response.body
-        with open('postcast.mp3', 'wb+') as f:
-            f.write(response.body)
+        #with open('postcast.mp3', 'wb') as f:
+            #f.write(response.body)
         yield item
